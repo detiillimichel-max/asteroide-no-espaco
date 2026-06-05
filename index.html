@@ -5,86 +5,65 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
 <title>Asteroides no Espaço</title>
 <style>
-    :root {
-        --bg: #02040a;
-        --fg: #e8f0ff;
-        --accent: #6ee7ff;
-        --glass: rgba(255,255,255,0.08);
-        --glass-b: rgba(255,255,255,0.22);
-    }
-    * { box-sizing: border-box; }
-    html, body {
-        margin: 0; height: 100%;
-        background: radial-gradient(1200px 800px at 70% -10%, #0a1430 0%, #02040a 60%), var(--bg);
-        color: var(--fg);
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        overscroll-behavior: none; user-select: none; -webkit-user-select: none; touch-action: none;
-    }
-    #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
-    #hud { position: fixed; inset: 0; pointer-events: none; padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
-    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; font-weight: 600; letter-spacing: 0.04em; text-shadow: 0 0 12px rgba(110,231,255,0.35); }
-    .score-block { display: grid; gap: 4px; }
-    .label { font-size: 11px; text-transform: uppercase; opacity: 0.7; letter-spacing: 0.12em; }
-    .value { font-size: clamp(18px, 4.5vw, 28px); font-variant-numeric: tabular-nums; line-height: 1; }
-    .lives { display: flex; gap: 8px; margin-top: 6px; filter: drop-shadow(0 0 6px rgba(110,231,255,0.5)); }
-    .life { width: 18px; height: 18px; opacity: 0.9; }
-    .center-msg { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
-    .title { font-size: clamp(32px, 10vw, 72px); font-weight: 800; letter-spacing: 0.06em; background: linear-gradient(180deg, #fff 0%, #b8dfff 60%, #7aa7ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(110,231,255,0.25); }
-    .subtitle { margin-top: 8px; font-size: clamp(14px, 3.5vw, 18px); opacity: 0.85; }
-    .hint { margin-top: 14px; font-size: 13px; opacity: 0.65; }
-    .pulse { animation: pulse 1.6s ease-in-out infinite; }
-    @keyframes pulse { 0%,100% { opacity: 0.65; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-2px); } }
-    #controls { position: fixed; inset: 0; pointer-events: none; }
-    .btn { position: absolute; width: 72px; height: 72px; border-radius: 50%; background: var(--glass); border: 1.5px solid var(--glass-b); backdrop-filter: blur(10px) saturate(140%); -webkit-backdrop-filter: blur(10px) saturate(140%); box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04); pointer-events: auto; display: grid; place-items: center; transition: transform 0.08s ease, background 0.2s ease, border-color 0.2s ease; -webkit-tap-highlight-color: transparent; }
-    .btn:active, .btn.active { transform: scale(0.94); background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.45); }
-    .btn svg { width: 34px; height: 34px; opacity: 0.95; filter: drop-shadow(0 0 8px rgba(110,231,255,0.5)); }
-    #btn-left { left: 24px; bottom: 24px; }
-    #btn-right { left: calc(24px + 72px + 16px); bottom: 24px; }
-    #btn-thrust { right: 24px; bottom: 24px; }
-    #btn-fire { right: 24px; bottom: calc(24px + 72px + 16px); }
-    @supports (padding: max(0px)) {
-        #btn-left, #btn-right { bottom: max(24px, env(safe-area-inset-bottom)); }
-        #btn-thrust { bottom: max(24px, env(safe-area-inset-bottom)); right: max(24px, env(safe-area-inset-right)); }
-        #btn-fire { bottom: calc(max(24px, env(safe-area-inset-bottom)) + 72px + 16px); right: max(24px, env(safe-area-inset-right)); }
-        #btn-left { left: max(24px, env(safe-area-inset-left)); }
-        #btn-right { left: calc(max(24px, env(safe-area-inset-left)) + 72px + 16px); }
-    }
+:root{--bg:#02040a;--fg:#e8f0ff;--accent:#6ee7ff;--glass:rgba(255,255,255,.08);--glass-b:rgba(255,255,255,.22)}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:radial-gradient(1200px 800px at 70% -10%,#0a1430 0%,#02040a 60%),var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;overscroll-behavior:none;user-select:none;-webkit-user-select:none;touch-action:none}
+#game{position:fixed;inset:0;width:100%;height:100%;display:block}
+#hud{position:fixed;inset:0;pointer-events:none;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;font-weight:600;letter-spacing:.04em;text-shadow:0 0 12px rgba(110,231,255,.35)}
+.score-block{display:grid;gap:4px}
+.label{font-size:11px;text-transform:uppercase;opacity:.7;letter-spacing:.12em}
+.value{font-size:clamp(18px,4.5vw,28px);font-variant-numeric:tabular-nums;line-height:1}
+.lives{display:flex;gap:8px;margin-top:6px;filter:drop-shadow(0 0 6px rgba(110,231,255,.5))}
+.life{width:18px;height:18px;opacity:.9}
+.center-msg{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.title{font-size:clamp(32px,10vw,72px);font-weight:800;letter-spacing:.06em;background:linear-gradient(180deg,#fff 0%,#b8dfff 60%,#7aa7ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px rgba(110,231,255,.25)}
+.subtitle{margin-top:8px;font-size:clamp(14px,3.5vw,18px);opacity:.85}
+.hint{margin-top:14px;font-size:13px;opacity:.65}
+.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.65;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
+#controls{position:fixed;inset:0;pointer-events:none}
+.btn{position:absolute;width:72px;height:72px;border-radius:50%;background:var(--glass);border:1.5px solid var(--glass-b);backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.04);pointer-events:auto;display:grid;place-items:center;transition:transform .08s ease,background .2s ease,border-color .2s ease;-webkit-tap-highlight-color:transparent}
+.btn:active,.btn.active{transform:scale(.94);background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.45)}
+.btn svg{width:34px;height:34px;opacity:.95;filter:drop-shadow(0 0 8px rgba(110,231,255,.5))}
+#btn-left{left:24px;bottom:24px}
+#btn-right{left:calc(24px + 72px + 16px);bottom:24px}
+#btn-thrust{right:24px;bottom:24px}
+#btn-fire{right:24px;bottom:calc(24px + 72px + 16px)}
+@supports(padding:max(0px)){
+#btn-left,#btn-right{bottom:max(24px,env(safe-area-inset-bottom))}
+#btn-thrust{bottom:max(24px,env(safe-area-inset-bottom));right:max(24px,env(safe-area-inset-right))}
+#btn-fire{bottom:calc(max(24px,env(safe-area-inset-bottom)) + 72px + 16px);right:max(24px,env(safe-area-inset-right))}
+#btn-left{left:max(24px,env(safe-area-inset-left))}
+#btn-right{left:calc(max(24px,env(safe-area-inset-left)) + 72px + 16px)}
+}
 </style>
 </head>
 <body>
 <canvas id="game"></canvas>
 <div id="hud">
-    <div class="topbar">
-        <div class="score-block">
-            <div class="label">Score</div>
-            <div class="value" id="score">0</div>
-            <div class="lives" id="lives"></div>
-        </div>
-        <div class="score-block" style="text-align:right">
-            <div class="label">High Score</div>
-            <div class="value" id="high">0</div>
-            <div class="label" style="margin-top:6px" id="level">Level 1</div>
-        </div>
-    </div>
-    <div class="center-msg" id="centerMsg">
-        <div class="title">ASTEROIDS</div>
-        <div class="subtitle">Gire • Acelere • Atire</div>
-        <div class="hint pulse">Pressione Espaço ou Toque em Atirar para Iniciar</div>
-    </div>
+<div class="topbar">
+<div class="score-block">
+<div class="label">Score</div>
+<div class="value" id="score">0</div>
+<div class="lives" id="lives"></div>
+</div>
+<div class="score-block" style="text-align:right">
+<div class="label">High Score</div>
+<div class="value" id="high">0</div>
+<div class="label" style="margin-top:6px" id="level">Level 1</div>
+</div>
+</div>
+<div class="center-msg" id="centerMsg">
+<div class="title">ASTEROIDS</div>
+<div class="subtitle">Gire • Acelere • Atire</div>
+<div class="hint pulse">Pressione Espaço ou Toque em Atirar para Iniciar</div>
+</div>
 </div>
 <div id="controls">
-    <button class="btn" id="btn-left" aria-label="Girar Esquerda">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <button class="btn" id="btn-right" aria-label="Girar Direita">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
-    <button class="btn" id="btn-thrust" aria-label="Acelerar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-    </button>
-    <button class="btn" id="btn-fire" aria-label="Atirar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3" fill="#e8f0ff"/></svg>
-    </button>
+<button class="btn" id="btn-left" aria-label="Girar Esquerda"><svg viewBox="0 0 24 24" fill="none" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+<button class="btn" id="btn-right" aria-label="Girar Direita"><svg viewBox="0 0 24 24" fill="none" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+<button class="btn" id="btn-thrust" aria-label="Acelerar"><svg viewBox="0 0 24 24" fill="none" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<button class="btn" id="btn-fire" aria-label="Atirar"><svg viewBox="0 0 24 24" fill="none" stroke="#e8f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3" fill="#e8f0ff"/></svg></button>
 </div>
 <script src="game.js"></script>
 </body>
